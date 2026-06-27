@@ -76,6 +76,15 @@
   .sync-dot.live   { background: #4caf7d; }
   .sync-dot.error  { background: var(--terra); }
   .sync-dot.saving { -webkit-animation: pulse 1s infinite; animation: pulse 1s infinite; background: #f0a050; }
+  .sync-reconfig {
+    margin-left: auto; -webkit-appearance: none; appearance: none;
+    background: none; border: 0; padding: 5px; margin: -5px -5px -5px 0;
+    line-height: 0; cursor: pointer; color: var(--ink-faint); opacity: 0.5;
+    -webkit-transition: opacity .15s ease, color .15s ease; transition: opacity .15s ease, color .15s ease;
+  }
+  .sync-reconfig:hover { opacity: 1; color: var(--terra); }
+  .sync-reconfig:active { opacity: 1; }
+  .sync-reconfig svg { display: block; }
   @-webkit-keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
@@ -472,7 +481,9 @@
 <div id="sync-bar" style="display:none">
   <span class="sync-dot" id="sync-dot"></span>
   <span id="sync-label">loading…</span>
-  <span style="margin-left:auto;cursor:pointer;opacity:0.4;font-size:0.65rem;letter-spacing:0.12em;" onclick="resetConfig()">⚙ reconfigure</span>
+  <button class="sync-reconfig" onclick="resetConfig()" title="Reconnect to a different sheet" aria-label="Reconnect to a different sheet">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+  </button>
 </div>
 
 <!-- HEADER -->
@@ -898,9 +909,19 @@ function closeDrawer() {
 }
 
 // ── CONFIG ───────────────────────────────────────
+// ┌───────────────────────────────────────────────────────────────────┐
+// │ PASTE YOUR APPS SCRIPT WEB APP URL BETWEEN THE QUOTES BELOW (once). │
+// │ Once it's here and you redeploy, every device — your computer AND   │
+// │ your iPhone — connects automatically with no re-pasting. Leave it   │
+// │ blank ('') to be asked for the URL on first use instead.            │
+// └───────────────────────────────────────────────────────────────────┘
+var DEFAULT_API_URL = '';
+
 var CFG_KEY  = 'toka_gs_url_v1';
 var RATE_KEY = 'toka_rate_v1';
-var API_URL  = localStorage.getItem(CFG_KEY) || '';
+// A URL saved on this device (via the connect screen) always wins; otherwise
+// fall back to the baked-in default above so the app just works everywhere.
+var API_URL  = localStorage.getItem(CFG_KEY) || DEFAULT_API_URL || '';
 var expenses = [];
 var selectedCat = 'ingredients';
 var sortKey  = 'date';
@@ -923,7 +944,11 @@ var CATS = {
 };
 
 // ── BOOT ─────────────────────────────────────────
-if (API_URL) { hideConfig(); revealApp(); loadData(); }
+// resetConfig() asks to show the connect screen again; honour that even when
+// a default URL is baked in, so "reconnect" can point at a different sheet.
+var forceConfig = false;
+try { forceConfig = sessionStorage.getItem('toka_force_config') === '1'; if (forceConfig) sessionStorage.removeItem('toka_force_config'); } catch (e) {}
+if (API_URL && !forceConfig) { hideConfig(); revealApp(); loadData(); }
 
 function saveConfig() {
   var url = document.getElementById('cfg-url').value.trim();
@@ -938,8 +963,9 @@ function saveConfig() {
 }
 
 function resetConfig() {
-  if (!confirm('Reset configuration? The page will reload.')) return;
+  if (!confirm('Reconnect to a different sheet? The page will reload.')) return;
   localStorage.removeItem(CFG_KEY);
+  try { sessionStorage.setItem('toka_force_config', '1'); } catch (e) {}
   location.reload();
 }
 
@@ -1023,7 +1049,7 @@ function triggerFileInput() {
 // ── SYNC STATUS ───────────────────────────────────
 function setSyncStatus(state, msg) {
   document.getElementById('sync-dot').className    = 'sync-dot ' + state;
-  document.getElementById('sync-label').textContent = msg;
+  document.getElementById('sync-label').textContent = (state === 'live') ? 'connected to sheet' : msg;
 }
 
 // ── API — use no-cors-safe approach for Safari ────
