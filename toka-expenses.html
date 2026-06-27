@@ -72,19 +72,22 @@
     -webkit-align-items: center; align-items: center;
     gap: 8px;
   }
+  #sync-label { -webkit-flex: 1 1 auto; flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-faint); display: inline-block; -webkit-flex-shrink: 0; flex-shrink: 0; }
   .sync-dot.live   { background: #4caf7d; }
   .sync-dot.error  { background: var(--terra); }
   .sync-dot.saving { -webkit-animation: pulse 1s infinite; animation: pulse 1s infinite; background: #f0a050; }
   .sync-reconfig {
     margin-left: auto; -webkit-appearance: none; appearance: none;
-    background: none; border: 0; padding: 5px; margin: -5px -5px -5px 0;
-    line-height: 0; cursor: pointer; color: var(--ink-faint); opacity: 0.5;
+    background: none; border: 0; padding: 5px; margin: -5px -5px -5px auto;
+    display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center; gap: 5px;
+    font: inherit; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1;
+    cursor: pointer; color: var(--ink-faint); opacity: 0.5;
     -webkit-transition: opacity .15s ease, color .15s ease; transition: opacity .15s ease, color .15s ease;
   }
   .sync-reconfig:hover { opacity: 1; color: var(--terra); }
   .sync-reconfig:active { opacity: 1; }
-  .sync-reconfig svg { display: block; }
+  .sync-reconfig svg { display: block; -webkit-flex-shrink: 0; flex-shrink: 0; }
   @-webkit-keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
@@ -483,6 +486,7 @@
   <span id="sync-label">loading…</span>
   <button class="sync-reconfig" onclick="resetConfig()" title="Reconnect to a different sheet" aria-label="Reconnect to a different sheet">
     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    <span>resetup</span>
   </button>
 </div>
 
