@@ -160,6 +160,105 @@
   .legend-item { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--ink-faint); }
   .legend-sw { width: 14px; height: 3px; border-radius: 2px; -webkit-flex-shrink: 0; flex-shrink: 0; }
   .an-empty { font-size: 0.78rem; color: var(--ink-faint); padding: 18px; text-align: center; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+  /* ---- daily tasks page ---- */
+  #today-body { padding: 0 48px 48px; }
+  .ftl-row.ftl-warn { border-left: 3px solid var(--red); padding-left: 11px; margin-left: -14px; background: #fdf1ef; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+  .ftl-cursor.due { background: var(--red); }
+  .ftl-meta .ftl-due { color: var(--red); font-size: 0.62rem; display: block; margin-top: 2px; }
+  .plan-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; }
+  .plan-headline { font-family: 'Jost', sans-serif; font-size: 1.1rem; color: var(--ink); margin-bottom: 2px; }
+  .plan-headline .plan-when { color: var(--terra); }
+  .plan-headline.due .plan-when { color: var(--red); }
+  .plan-sub { font-size: 0.74rem; color: var(--ink-faint); margin-bottom: 16px; }
+  .plan-vol { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .plan-vol label { font-size: 0.72rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.09em; }
+  .plan-vol input { width: 84px; padding: 7px 9px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: 'DM Mono', monospace; font-size: 0.86rem; background: var(--bg); color: var(--ink); }
+  .vol-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 5px 13px; font-family: 'Jost', sans-serif; font-size: 0.7rem; letter-spacing: 0.06em; color: var(--ink-faint); cursor: pointer; -webkit-transition: all .12s; transition: all .12s; }
+  .vol-chip:hover { border-color: var(--terra-light); color: var(--terra); }
+  .vol-chip.active { background: var(--terra); border-color: var(--terra); color: #fff; }
+  .plan-steps { font-size: 0.82rem; color: var(--ink); line-height: 1.65; background: var(--terra-pale); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 16px; }
+  .plan-steps b { color: var(--terra); font-weight: 600; }
+  .need-tbl { width: 100%; border-collapse: collapse; }
+  .need-tbl th { text-align: left; font-family: 'Jost', sans-serif; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); font-weight: 500; padding: 0 10px 7px; border-bottom: 1px solid var(--border); }
+  .need-tbl th.col-amt { width: 120px; }
+  .need-tbl td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 0.84rem; }
+  .need-tbl tr:last-child td { border-bottom: none; }
+  .need-tbl .ni-item { color: var(--ink); }
+  .need-tbl .ni-amt { font-family: 'DM Mono', monospace; color: var(--terra); white-space: nowrap; }
+  .need-tbl .ni-amt .ni-sub { color: var(--ink-faint); font-size: 0.74rem; }
+  .note-input { width: 100%; box-sizing: border-box; border: 1px solid transparent; background: transparent; border-radius: var(--radius-sm); padding: 5px 7px; font-family: 'Jost', sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--ink); -webkit-transition: border-color .12s, background .12s; transition: border-color .12s, background .12s; }
+  .note-input:hover { border-color: var(--border); }
+  .note-input:focus { outline: none; border-color: var(--terra-light); background: var(--bg); }
+  .task-list { list-style: none; margin: 0; padding: 0; }
+  .task-item { display: -webkit-flex; display: flex; -webkit-align-items: baseline; align-items: baseline; gap: 12px; padding: 11px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; }
+  .task-item.due { border-left: 3px solid var(--red); background: #fdf1ef; }
+  .task-when { font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 500; color: var(--terra); white-space: nowrap; -webkit-flex-shrink: 0; flex-shrink: 0; min-width: 96px; }
+  .task-item.due .task-when { color: var(--red); }
+  .task-what { font-size: 0.82rem; color: var(--ink); }
+  .task-what .task-id { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--ink-faint); }
+  .today-notes { width: 100%; box-sizing: border-box; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 15px; font-family: 'Jost', sans-serif; font-weight: 300; font-size: 0.86rem; line-height: 1.6; color: var(--ink); background: var(--surface); }
+  .today-notes:focus { outline: none; border-color: var(--terra-light); }
+  .local-hint { font-size: 0.64rem; color: var(--ink-faint); margin-top: 6px; letter-spacing: 0.04em; }
+  /* daily tasks — titles match other pages; body content at 10pt; full-width bars; day-x marker; hover readings */
+  #today-body { font-size: 10pt; }
+  #today-body .sec-title { font-size: 1.15rem; }
+  #today-body .sec-note { font-size: 10pt; }
+  #today-body .an-empty { font-size: 10pt; }
+  #today-body .ftl-head-track, #today-body .ftl-track-outer { max-width: none; }
+  #today-body .ftl-batch-id { font-size: 10pt; }
+  .ftl-day-label { position: absolute; top: 5px; font-family: 'DM Mono', monospace; font-size: 0.84rem; color: var(--ink-faint); white-space: nowrap; line-height: 1; z-index: 2; }
+  #today-body .ftl-day-label { font-size: 10pt; color: var(--ink); }
+  #today-body .ftl-row[data-tiphtml] { cursor: default; }
+  #today-body .ftl-row[data-tiphtml]:hover { background: var(--surface2); }
+  #today-body .ftl-row.ftl-warn:hover { background: #fbe7e3; }
+  #today-body .plan-headline { font-size: 1.3rem; }
+  #today-body .plan-sub { font-size: 10pt; }
+  #today-body .plan-vol label { font-size: 10pt; }
+  #today-body .plan-vol input { font-size: 10pt; }
+  #today-body .vol-chip { font-size: 10pt; }
+  #today-body .plan-steps { font-size: 10pt; }
+  #today-body .need-tbl th { font-size: 10pt; }
+  #today-body .need-tbl td { font-size: 10pt; }
+  #today-body .need-tbl .ni-amt .ni-sub { font-size: 10pt; }
+  #today-body .note-input { font-size: 10pt; }
+  #today-body .task-when { font-size: 10pt; }
+  #today-body .task-what { font-size: 10pt; }
+  #today-body .task-what .task-id { font-size: 10pt; }
+  #today-body .today-notes { font-size: 10pt; }
+  #today-body .local-hint { font-size: 9pt; }
+  .plan-card + .plan-card, .plan-card + .brew-done, .brew-done + .plan-card, .brew-done + .brew-done { margin-top: 14px; }
+  .plan-src { color: var(--ink-faint); margin: 0 0 12px; }
+  .plan-vol-unit { color: var(--ink-faint); font-size: 0.8rem; }
+  .prep-num { color: var(--red); font-weight: 600; }
+  .prep-title { font-family: 'Jost', sans-serif; font-weight: 500; color: var(--ink); margin: 2px 0 6px; }
+  .prep-list { margin: 0 0 16px 18px; padding: 0; }
+  .prep-list li { margin-bottom: 7px; line-height: 1.55; color: var(--ink); }
+  .brew-check { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 9px; margin-top: 14px; cursor: pointer; color: var(--ink); }
+  .brew-check input { width: 16px; height: 16px; cursor: pointer; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  .brew-done { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 11px 15px; color: var(--ink-faint); }
+  .brew-undo { background: none; border: none; color: var(--terra); cursor: pointer; text-decoration: underline; font: inherit; padding: 0; }
+  #today-body .prep-title { font-size: 10pt; }
+  #today-body .prep-list li { font-size: 10pt; }
+  #today-body .plan-src { font-size: 9pt; }
+  #today-body .brew-check { font-size: 10pt; }
+  #today-body .brew-done { font-size: 10pt; }
+  .brew-head { display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; gap: 10px; cursor: pointer; -webkit-user-select: none; user-select: none; }
+  .brew-head-text { -webkit-flex: 1; flex: 1; min-width: 0; }
+  .brew-tri { color: var(--ink-faint); font-size: 0.8rem; line-height: 1.7; -webkit-flex-shrink: 0; flex-shrink: 0; -webkit-transition: -webkit-transform .15s; transition: transform .15s; }
+  .plan-card:not(.collapsed) .brew-tri { -webkit-transform: rotate(90deg); transform: rotate(90deg); }
+  .plan-card.collapsed .plan-src { margin-bottom: 0; }
+  .brew-body { margin-top: 14px; }
+  .plan-card.collapsed .brew-body { display: none; }
+  .task-box { display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+  .task-note { -webkit-flex: 1; flex: 1; box-sizing: border-box; min-height: 52px; resize: vertical; border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 13px; font-family: 'Jost', sans-serif; font-weight: 300; line-height: 1.5; color: var(--ink); background: var(--surface); }
+  .task-note:focus { outline: none; border-color: var(--terra-light); }
+  .task-remove { -webkit-flex-shrink: 0; flex-shrink: 0; width: 32px; height: 32px; border: none; background: none; color: var(--ink-faint); font-size: 1.3rem; line-height: 1; cursor: pointer; border-radius: var(--radius-sm); }
+  .task-remove:hover { color: var(--red); background: var(--surface2); }
+  .task-add { width: 100%; box-sizing: border-box; padding: 12px; border: 1.5px dashed var(--border); border-radius: var(--radius); background: none; color: var(--ink-faint); font-family: 'Jost', sans-serif; cursor: pointer; -webkit-transition: all .12s; transition: all .12s; }
+  .task-add:hover { border-color: var(--terra-light); color: var(--terra); }
+  .task-add-plus { font-weight: 600; }
+  #today-body .task-note { font-size: 10pt; }
+  #today-body .task-add { font-size: 10pt; }
   .rate-btn { background: none; border: none; cursor: pointer; font-size: 0.92rem; padding: 0 2px; line-height: 1; opacity: 0.28; -webkit-filter: grayscale(1); filter: grayscale(1); -webkit-transition: opacity .12s; transition: opacity .12s; }
   .rate-btn:hover { opacity: 0.65; -webkit-filter: grayscale(0); filter: grayscale(0); }
   .rate-btn.active { opacity: 1; -webkit-filter: grayscale(0); filter: grayscale(0); }
@@ -237,7 +336,9 @@
     .view-bar { padding: 12px 20px; }
     .content-head { padding: 24px 20px 14px; }
     .table-wrap { padding: 0 20px 28px; }
-    #an-body { padding: 0 20px 28px; }
+    #an-body, #today-body { padding: 0 20px 28px; }
+    .task-when { min-width: 84px; }
+    .need-tbl th.col-amt { width: 96px; }
     .ftl-head-spacer, .ftl-label { width: 132px; }
     .ftl-meta, .ftl-head-meta { width: 44px; padding-left: 6px; font-size: 0.62rem; }
     .coming-soon-grid { grid-template-columns: 1fr; }
@@ -317,10 +418,10 @@
       <div class="name">Bottling</div>
       <div class="desc">Second fermentation &mdash; bottle ID, source brew, sugar, yeast, flavour &amp; fridge dates.</div>
     </div>
-    <div class="feature-card clickable" onclick="showView('analytics')">
-      <div class="icon">&#128202;</div>
-      <div class="name">Analytics</div>
-      <div class="desc">Live fermentation, batch &amp; bottling KPIs, and what makes a good brew.</div>
+    <div class="feature-card clickable" onclick="showView('today')">
+      <div class="icon">&#128203;</div>
+      <div class="name">Daily tasks</div>
+      <div class="desc">Today&rsquo;s to-do&rsquo;s &mdash; what&rsquo;s fermenting, when to brew next &amp; when to fridge.</div>
     </div>
   </div>
 </div>
@@ -462,7 +563,19 @@
   </div>
 </div>
 
-<!-- ===== ANALYTICS VIEW ===== -->
+<!-- ===== DAILY TASKS VIEW ===== -->
+<div id="view-today" style="display:none;">
+  <div class="view-bar">
+    <button class="back-link" onclick="showView('home')">&larr; brew log</button>
+  </div>
+  <div class="content-head">
+    <div class="content-title">Daily tasks</div>
+    <div class="content-sub" id="today-sub">&nbsp;</div>
+  </div>
+  <div id="today-body"></div>
+</div>
+
+<!-- ===== ANALYTICS VIEW (set aside for now) ===== -->
 <div id="view-analytics" style="display:none;">
   <div class="view-bar">
     <button class="back-link" onclick="showView('home')">&larr; brew log</button>
@@ -859,10 +972,12 @@ function showView(v) {
   document.getElementById('view-bottling').style.display = (v === 'bottling') ? 'block' : 'none';
   document.getElementById('view-readings').style.display = (v === 'readings') ? 'block' : 'none';
   document.getElementById('view-analytics').style.display = (v === 'analytics') ? 'block' : 'none';
+  document.getElementById('view-today').style.display = (v === 'today') ? 'block' : 'none';
   if (v === 'f1') { renderTable(); if (!readings.length) loadReadings(function () { renderTable(); }); }
   if (v === 'bottling') { renderBottles(); loadBottles(); }
   if (v === 'readings') { renderReadings(); loadData(function () { loadReadings(); }); }
   if (v === 'analytics') { renderAnalytics(); loadData(function () { loadBottles(function () { loadReadings(function () { renderAnalytics(); }); }); }); }
+  if (v === 'today') { renderToday(); loadData(function () { loadBottles(function () { loadReadings(function () { renderToday(); }); }); }); }
   window.scrollTo(0, 0);
 }
 
@@ -2225,7 +2340,16 @@ function anGoodRateBuckets(title, note, bucketFn, valueFn) {
   var bars = []; for (i = 0; i < defs.length; i++) if (defs[i].n > 0) bars.push({ label: defs[i].lab, value: defs[i].good / defs[i].n * 100, sub: 'n=' + defs[i].n });
   return h + '<div class="chart-card">' + barChartSVG(bars) + '</div></div>';
 }
+/* Analytics is set aside for now. The full builder is preserved below as
+   renderAnalyticsFull() so it can be switched back on whenever wanted —
+   the live fermentation timeline it used now powers the Daily-tasks page. */
 function renderAnalytics() {
+  var body = document.getElementById('an-body'); if (!body) return;
+  body.innerHTML = '<div class="an-empty">Analytics is set aside for now. Your daily tasks &amp; brewing plan have moved to the new <b>Daily tasks</b> page.</div>';
+  var sub = document.getElementById('an-sub');
+  if (sub) sub.textContent = '\u00a0';
+}
+function renderAnalyticsFull() {
   var body = document.getElementById('an-body'); if (!body) return;
   var html = anFermenting() + anCurves();
   html += anGoodRateBuckets('Good rate by F2 days', '% of rated bottlings marked good, by carbonation (F2) duration.',
@@ -2237,6 +2361,284 @@ function renderAnalytics() {
   body.innerHTML = html;
   var sub = document.getElementById('an-sub');
   if (sub) sub.textContent = batches.length + ' batches \u00b7 ' + bottles.length + ' bottlings \u00b7 ' + readings.length + ' readings';
+}
+
+/* ====================== DAILY TASKS ====================== */
+var F1_DAYS = 10, F2_DAYS = 6;
+var HOT_FRACTION = 0.2;     // 200 L -> 40 L hot ; 100 L -> 20 L hot
+var LITRES_PER_BOIL = 10;   // 40 L hot / 4 boils
+var TEA_G_PER_L = 7;        // 7 g tea per litre of total volume
+var SUGAR_G_PER_L = 50;     // 50 g sugar per litre of total volume
+var STARTER_FRACTION = 0.10;// starter liquid = 10% of total volume
+var F2_WARN_DAY = 5;        // bottles flagged red from day 5
+
+/* device-local storage (best-effort; mirrors the sessionStorage use at boot) */
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+function round1(v) { return Math.round(v * 10) / 10; }
+function numPlain(v) { return fmtQty(v, ''); }
+
+/* ---- active sets ---- */
+function todayActiveF1() {
+  var out = [];
+  for (var i = 0; i < batches.length; i++) {
+    var b = batches[i];
+    if (b.archived || !b.date) continue;
+    out.push(b);
+  }
+  out.sort(anDateAsc); // oldest first = furthest along, shown on top
+  return out;
+}
+function todayActiveF2() {
+  var out = [];
+  for (var i = 0; i < bottles.length; i++) {
+    var bo = bottles[i];
+    if (bo.archived || !bo.bottlingDate || bo.fridgeDate) continue; // fridgeDate set => already chilled
+    out.push(bo);
+  }
+  out.sort(function (a, c) { return String(a.bottlingDate) < String(c.bottlingDate) ? -1 : (String(a.bottlingDate) > String(c.bottlingDate) ? 1 : 0); });
+  return out;
+}
+
+/* ---- generic day-x-of-N timeline (reuses the .ftl-* timeline styling) ---- */
+/* hover tooltip: latest Brix / pH / Temp for a batch */
+function todayBatchTip(b) {
+  if (!b) return '';
+  var head = '<div class="tt-head">' + esc(b.id || b.vessel || 'batch') + '</div>';
+  var rs = anReadingsForBatch(b); // chronological (oldest first)
+  function lastOf(field) {
+    for (var k = rs.length - 1; k >= 0; k--) { if (anNum(rs[k][field]) != null) return { v: rs[k][field], date: rs[k].date }; }
+    return null;
+  }
+  var brix = lastOf('brix'), ph = lastOf('ph'), temp = lastOf('temp');
+  function row(label, rec, unit) {
+    var v = rec ? (fmtQty(rec.v, unit) + (rec.date ? '<span class="tt-dt">' + esc(fmtDate(rec.date)) + '</span>' : '')) : '\u2014';
+    return '<tr><td class="tt-d">' + label + '</td><td class="tt-v">' + v + '</td></tr>';
+  }
+  var readHtml = (!brix && !ph && !temp)
+    ? '<div class="tt-empty">No readings logged yet</div>'
+    : '<div class="tt-subhead">Latest readings</div><table class="tt-tbl">'
+        + row('Brix', brix, '%') + row('pH', ph, '') + row('Temp', temp, '\u00b0C') + '</table>';
+  return head + readHtml;
+}
+
+function todayTimeline(rows, o) {
+  var DAYS = o.days, h = '<div class="ferm-timeline">';
+  for (var i = 0; i < rows.length; i++) {
+    var row = rows[i];
+    var day = daysBetween(row.start, todayISO()); if (day == null || day < 0) day = 0;
+    var pct = Math.min(day / DAYS * 100, 100);
+    var over = day > DAYS;
+    var warn = (o.warnFromDay != null && day >= o.warnFromDay);
+    var tipAttr = '';
+    if (row.tipBatch) { var tipHtml = todayBatchTip(row.tipBatch); if (tipHtml) tipAttr = ' data-tiphtml="' + esc(tipHtml) + '"'; }
+    h += '<div class="ftl-row' + (warn ? ' ftl-warn' : '') + '"' + tipAttr + '>';
+    h += '<div class="ftl-label"><div class="ftl-batch-id">' + esc(row.id) + '</div></div>';
+    h += '<div class="ftl-track-outer"><div class="ftl-track-rail"><div class="ftl-track-fill' + (over ? ' over' : '') + '" style="width:' + pct.toFixed(1) + '%"></div></div>';
+    // "day X" marker at the current-day point
+    var lblTf;
+    if (pct <= 8)       lblTf = '-webkit-transform:none;transform:none';
+    else if (pct >= 92) lblTf = '-webkit-transform:translateX(-100%);transform:translateX(-100%)';
+    else                lblTf = '-webkit-transform:translateX(-50%);transform:translateX(-50%)';
+    h += '<div class="ftl-day-label" style="left:' + pct.toFixed(1) + '%;' + lblTf + '">day ' + day + '</div>';
+    h += '<div class="ftl-cursor' + (warn ? ' due' : '') + '" style="left:' + pct.toFixed(1) + '%"></div>';
+    h += '</div></div>'; // ftl-track-outer + ftl-row
+  }
+  return h + '</div>';
+}
+
+/* ---- sections ---- */
+function todayF1Section() {
+  var active = todayActiveF1();
+  var h = '<div class="an-section"><div class="sec-title">First fermentation in progress</div>';
+  h += '<div class="sec-note">Day of ferment across a ' + F1_DAYS + '-day window. Hover a bar to see that batch\u2019s latest Brix, pH &amp; temperature.</div>';
+  if (!active.length) return h + '<div class="an-empty">Nothing in first fermentation right now. Start a batch under <b>First fermentation</b> and it shows up here.</div></div>';
+  var rows = [];
+  for (var i = 0; i < active.length; i++) {
+    var b = active[i];
+    rows.push({ id: b.id || b.vessel || 'batch', start: b.date, tipBatch: b });
+  }
+  return h + todayTimeline(rows, { days: F1_DAYS, warnFromDay: null }) + '</div>';
+}
+function todayF2Section() {
+  var active = todayActiveF2();
+  var h = '<div class="an-section"><div class="sec-title">Second fermentation in progress</div>';
+  h += '<div class="sec-note">Day of carbonation across ' + F2_DAYS + ' days. Bottles on day ' + F2_WARN_DAY + '+ are flagged in red. Hover a bar to see its source batch\u2019s readings.</div>';
+  if (!active.length) return h + '<div class="an-empty">No bottles carbonating right now. Bottle a batch (bottling date set, no fridge date yet) and it shows up here.</div></div>';
+  var rows = [];
+  for (var i = 0; i < active.length; i++) {
+    var bo = active[i], relB = null;
+    for (var k = 0; k < batches.length; k++) { if (String(batches[k].uid) === String(bo.relF1Uid)) { relB = batches[k]; break; } }
+    rows.push({ id: bo.bottleId || bo.relF1Id || 'bottle', start: bo.bottlingDate, tipBatch: relB });
+  }
+  return h + todayTimeline(rows, { days: F2_DAYS, warnFromDay: F2_WARN_DAY }) + '</div>';
+}
+
+/* ---- brew-the-next-batch plan ---- */
+function brewCalc(b, V) {
+  var hot = V * HOT_FRACTION;                                  // hot water = 20% of total
+  var boils = Math.max(1, Math.round(hot / LITRES_PER_BOIL));  // pots of ~10 L hot water
+  var starter = V * STARTER_FRACTION;                          // starter = 10% of total
+  var cold = V - hot - starter; if (cold < 0) cold = 0;        // top-off water = total - hot - starter
+  var teaTotal = TEA_G_PER_L * V;                              // 7 g per litre
+  var sugarTotal = SUGAR_G_PER_L * V;                          // 50 g per litre
+  var steepMin = steepToMin(b ? b.steep : '');
+  if (steepMin === '' || steepMin == null) steepMin = '5';
+  return {
+    V: V, hot: hot, boils: boils, starter: starter, cold: cold,
+    teaTotal: teaTotal, sugarTotal: sugarTotal,
+    teaPerBoil: teaTotal / boils,
+    sugarPerBoil: sugarTotal / boils,
+    coldPerBoil: cold / boils, steep: steepMin
+  };
+}
+function brewTarget(uid) {
+  var stored = lsGet('toka_brew_target_' + uid), v = (stored != null) ? parseFloat(stored) : NaN;
+  return (!isNaN(v) && v > 0) ? v : 200;   // default 200 L, editable per batch
+}
+function setBrewTarget(uid, v) {
+  v = parseFloat(v); if (isNaN(v) || v <= 0) return;
+  lsSet('toka_brew_target_' + uid, String(v)); renderToday();
+}
+function brewDone(uid) { return lsGet('toka_brewdone_' + uid) === '1'; }
+function setBrewDone(uid, done) { lsSet('toka_brewdone_' + uid, done ? '1' : '0'); renderToday(); }
+function rn(s) { return '<span class="prep-num">' + s + '</span>'; }
+function planNote(key, fallback) {
+  var stored = lsGet('toka_plan_note_' + key);
+  return (stored != null) ? stored : (fallback || '');
+}
+function onPlanNote(key, el) { lsSet('toka_plan_note_' + key, el.value); }
+function planRow(key, item, amtHtml) {
+  var note = planNote(key, '');
+  return '<tr><td class="ni-item">' + esc(item) + '</td>'
+    + '<td class="ni-amt">' + amtHtml + '</td>'
+    + '<td><input class="note-input" type="text" value="' + esc(note) + '" placeholder="add a note" oninput="onPlanNote(\'' + key + '\', this)" /></td></tr>';
+}
+function toggleBrewBox(uid) {
+  var el = document.getElementById('brewbox_' + uid); if (!el) return;
+  el.classList.toggle('collapsed');
+  lsSet('toka_brew_open_' + uid, el.classList.contains('collapsed') ? '0' : '1');
+}
+function brewBoxHtml(b) {
+  var uid = b.uid;
+  var day = daysBetween(b.date, todayISO()); if (day == null) day = 0;
+  var toBrew = (F1_DAYS - 1) - day;     // brew the next tea 1 day before this batch reaches day 10
+  var whenTxt, due = false;
+  if (toBrew > 1)         whenTxt = 'in ' + toBrew + ' days';
+  else if (toBrew === 1)  whenTxt = 'in 1 day';
+  else if (toBrew === 0)  whenTxt = 'today';
+  else if (toBrew === -1) { whenTxt = 'yesterday'; due = true; }
+  else                    { whenTxt = (-toBrew) + ' days ago'; due = true; }
+
+  if (brewDone(uid)) {
+    return '<div class="brew-done">\u2713 Brewed for ' + esc(b.id || b.vessel || 'batch')
+      + '<button type="button" class="brew-undo" onclick="setBrewDone(\'' + uid + '\', false)">undo</button></div>';
+  }
+
+  var V = brewTarget(uid), c = brewCalc(b, V);
+  var open = lsGet('toka_brew_open_' + uid) === '1';   // default collapsed
+
+  var h = '<div class="plan-card brew-box' + (open ? '' : ' collapsed') + '" id="brewbox_' + uid + '">';
+  h += '<div class="brew-head" onclick="toggleBrewBox(\'' + uid + '\')">';
+  h += '<span class="brew-tri" aria-hidden="true">\u25B8</span>';
+  h += '<div class="brew-head-text">';
+  h += '<div class="plan-headline' + (due ? ' due' : '') + '">Brew the next batch <span class="plan-when">' + whenTxt + '</span></div>';
+  h += '<div class="plan-src">for the brew after ' + esc(b.id || b.vessel || 'batch') + ' \u00b7 day ' + day + ' / ' + F1_DAYS + '</div>';
+  h += '</div></div>';
+
+  h += '<div class="brew-body">';
+  h += '<div class="plan-vol"><label>Target volume</label>'
+     + '<input type="number" min="1" step="1" value="' + numPlain(V) + '" onchange="setBrewTarget(\'' + uid + '\', this.value)" />'
+     + '<span class="plan-vol-unit">L</span></div>';
+
+  h += '<div class="prep-title">Preparation</div><ul class="prep-list">';
+  h += '<li>For ' + numPlain(V) + ' L you need ' + rn(fmtQty(round1(c.hot), '')) + ' L hot water.</li>';
+  h += '<li>Boil it in ' + rn(c.boils) + ' \u00d7 ' + LITRES_PER_BOIL + ' L batches.</li>';
+  h += '<li>For each ' + LITRES_PER_BOIL + ' L batch, boil the water, then steep ' + rn(Math.round(c.teaPerBoil) + ' g')
+     + ' tea for ' + c.steep + ' min and take it out. Add ' + rn(Math.round(c.sugarPerBoil) + ' g')
+     + ' sugar. Stir and transfer into the barrel. Top up with ' + rn(fmtQty(round1(c.coldPerBoil), '')) + ' L cold water.</li>';
+  h += '<li>Add the SCOBY and ' + rn(fmtQty(round1(c.starter), '')) + ' L starter liquid the next day, when the temperature has dropped to 26 \u00b0C.</li>';
+  h += '</ul>';
+
+  h += '<table class="need-tbl"><thead><tr><th>What I need</th><th class="col-amt">Amount</th><th>Notes</th></tr></thead><tbody>';
+  h += planRow(uid + '_hot', 'Hot water', fmtQty(round1(c.hot), 'L'));
+  h += planRow(uid + '_tea', 'Tea', Math.round(c.teaTotal) + ' g');
+  h += planRow(uid + '_sugar', 'Sugar', fmtQty(c.sugarTotal / 1000, 'kg'));
+  h += planRow(uid + '_cold', 'Cold water', fmtQty(round1(c.cold), 'L'));
+  h += planRow(uid + '_starter', 'Starter liquid', fmtQty(round1(c.starter), 'L'));
+  h += '</tbody></table>';
+
+  h += '<label class="brew-check"><input type="checkbox" onchange="setBrewDone(\'' + uid + '\', this.checked)" /> I\u2019ve brewed this batch</label>';
+  h += '<div class="local-hint">Volume &amp; notes are saved on this device.</div>';
+  h += '</div>'; // brew-body
+  return h + '</div>'; // plan-card
+}
+function todayBrewPlan() {
+  var h = '<div class="an-section"><div class="sec-title">Time to brew the next batch</div>';
+  var active = todayActiveF1(), boxes = [], i;
+  for (i = 0; i < active.length; i++) {
+    var day = daysBetween(active[i].date, todayISO()); if (day == null) day = 0;
+    if (((F1_DAYS - 1) - day) <= 3) boxes.push(active[i]); // 3 days before brew day (i.e. day >= 6)
+  }
+  if (!boxes.length) {
+    return h + '<div class="an-empty">No brews to prepare yet. A box appears about 3 days before a batch is due \u2014 once it reaches day ' + (F1_DAYS - 4) + '.</div></div>';
+  }
+  for (i = 0; i < boxes.length; i++) h += brewBoxHtml(boxes[i]);
+  return h + '</div>';
+}
+
+/* ---- fridge schedule ---- */
+function todayFridge() {
+  var active = todayActiveF2();
+  var h = '<div class="an-section"><div class="sec-title">Put bottles in the fridge</div>';
+  if (!active.length) return h + '<div class="sec-note">Fridge reminders show up here while bottles are carbonating.</div><div class="an-empty">Nothing waiting on the counter.</div></div>';
+  h += '<div class="sec-note">Move each bottling to the fridge once it hits day ' + F2_DAYS + '.</div><ul class="task-list">';
+  for (var i = 0; i < active.length; i++) {
+    var bo = active[i];
+    var day = daysBetween(bo.bottlingDate, todayISO()); if (day == null || day < 0) day = 0;
+    var toFridge = F2_DAYS - day, dueF = toFridge <= 1, whenTxt;
+    if (toFridge > 1)       whenTxt = 'in ' + toFridge + ' days';
+    else if (toFridge === 1) whenTxt = 'tomorrow';
+    else if (toFridge === 0) whenTxt = 'today';
+    else                     whenTxt = ((-toFridge) === 1 ? '1 day overdue' : (-toFridge) + ' days overdue');
+    var label = bo.bottleId || bo.relF1Id || 'bottle';
+    var flav = (bo.flavors && String(bo.flavors).trim() !== '') ? (' \u00b7 ' + esc(bo.flavors)) : '';
+    h += '<li class="task-item' + (dueF ? ' due' : '') + '"><span class="task-when">' + whenTxt + '</span>'
+       + '<span class="task-what"><span class="task-id">' + esc(label) + '</span> &mdash; day ' + day + ' of ' + F2_DAYS + flav + '</span></li>';
+  }
+  return h + '</ul></div>';
+}
+
+/* ---- other tasks (multiple, device-local) ---- */
+function getTasks() {
+  try { var s = lsGet('toka_tasks'); if (s) { var a = JSON.parse(s); if (Array.isArray(a) && a.length) return a; } } catch (e) {}
+  var legacy = lsGet('toka_today_notes');
+  return (legacy && String(legacy).trim() !== '') ? [legacy] : [''];
+}
+function saveTasks(a) { lsSet('toka_tasks', JSON.stringify(a)); }
+function onTaskInput(i, el) { var a = getTasks(); if (i < a.length) { a[i] = el.value; saveTasks(a); } }
+function addTask() { var a = getTasks(); a.push(''); saveTasks(a); renderToday(); }
+function removeTask(i) { var a = getTasks(); a.splice(i, 1); if (!a.length) a = ['']; saveTasks(a); renderToday(); }
+function todayTasks() {
+  var tasks = getTasks();
+  var h = '<div class="an-section"><div class="sec-title">Other tasks</div>';
+  for (var i = 0; i < tasks.length; i++) {
+    h += '<div class="task-box">'
+       + '<textarea class="task-note" placeholder="A task to remember\u2026" oninput="onTaskInput(' + i + ', this)">' + esc(tasks[i]) + '</textarea>'
+       + '<button type="button" class="task-remove" title="Remove task" onclick="removeTask(' + i + ')">\u00d7</button>'
+       + '</div>';
+  }
+  h += '<button type="button" class="task-add" onclick="addTask()"><span class="task-add-plus">+</span> add a task</button>';
+  h += '<div class="local-hint">Saved on this device.</div>';
+  return h + '</div>';
+}
+
+function renderToday() {
+  var body = document.getElementById('today-body'); if (!body) return;
+  body.innerHTML = todayF1Section() + todayF2Section() + todayBrewPlan() + todayFridge() + todayTasks();
+  var sub = document.getElementById('today-sub');
+  if (sub) sub.textContent = fmtDate(todayISO()) + ' \u00b7 ' + todayActiveF1().length + ' fermenting \u00b7 ' + todayActiveF2().length + ' carbonating';
 }
 
 /* ---- boot ---- */
