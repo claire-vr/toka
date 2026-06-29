@@ -1378,7 +1378,9 @@ function fillF1Select(selectedUid) {
   var sorted = batches.slice().sort(cmpBatches);
   for (var i = 0; i < sorted.length; i++) {
     var b = sorted[i];
-    opts += '<option value="' + esc(b.uid) + '">' + esc(f1Label(b)) + '</option>';
+    // only active batches when adding; keep the currently-linked batch when editing, even if archived
+    if (b.archived && String(b.uid) !== String(selectedUid || '')) continue;
+    opts += '<option value="' + esc(b.uid) + '">' + esc(f1Label(b)) + (b.archived ? ' (archived)' : '') + '</option>';
   }
   sel.innerHTML = opts;
   sel.value = selectedUid || '';
@@ -1755,8 +1757,12 @@ function bottleBatchTip(b) {
   var sum = batchSummaryText(b.relF1Uid);
   var sumHtml = sum ? '<div class="tt-sum">' + esc(sum).replace(/\n/g, '<br>') + '</div>' : '';
   var rs = anReadingsForBatch(bx); // chronological (oldest first)
+  var cap = b.bottlingDate || null;  // only readings up to bottling time
   function lastOf(field) {
-    for (var k = rs.length - 1; k >= 0; k--) { if (anNum(rs[k][field]) != null) return { v: rs[k][field], date: rs[k].date }; }
+    for (var k = rs.length - 1; k >= 0; k--) {
+      if (cap && rs[k].date && String(rs[k].date) > String(cap)) continue;
+      if (anNum(rs[k][field]) != null) return { v: rs[k][field], date: rs[k].date };
+    }
     return null;
   }
   var brix = lastOf('brix'), ph = lastOf('ph'), temp = lastOf('temp');
@@ -1765,8 +1771,8 @@ function bottleBatchTip(b) {
     return '<tr><td class="tt-d">' + label + '</td><td class="tt-v">' + v + '</td></tr>';
   }
   var readHtml = (!brix && !ph && !temp)
-    ? '<div class="tt-empty">No readings logged yet</div>'
-    : '<div class="tt-subhead">Latest readings</div><table class="tt-tbl">'
+    ? '<div class="tt-empty">' + (cap ? 'No readings logged before bottling' : 'No readings logged yet') + '</div>'
+    : '<div class="tt-subhead">' + (cap ? 'Readings at bottling' : 'Latest readings') + '</div><table class="tt-tbl">'
         + row('Brix', brix, '%') + row('pH', ph, '') + row('Temp', temp, '\u00b0C') + '</table>';
   return head + sumHtml + readHtml;
 }
@@ -2403,12 +2409,16 @@ function todayActiveF2() {
 
 /* ---- generic day-x-of-N timeline (reuses the .ftl-* timeline styling) ---- */
 /* hover tooltip: latest Brix / pH / Temp for a batch */
-function todayBatchTip(b) {
+function todayBatchTip(b, cutoffIso) {
   if (!b) return '';
   var head = '<div class="tt-head">' + esc(b.id || b.vessel || 'batch') + '</div>';
   var rs = anReadingsForBatch(b); // chronological (oldest first)
+  var cap = cutoffIso || null;
   function lastOf(field) {
-    for (var k = rs.length - 1; k >= 0; k--) { if (anNum(rs[k][field]) != null) return { v: rs[k][field], date: rs[k].date }; }
+    for (var k = rs.length - 1; k >= 0; k--) {
+      if (cap && rs[k].date && String(rs[k].date) > String(cap)) continue;
+      if (anNum(rs[k][field]) != null) return { v: rs[k][field], date: rs[k].date };
+    }
     return null;
   }
   var brix = lastOf('brix'), ph = lastOf('ph'), temp = lastOf('temp');
@@ -2417,8 +2427,8 @@ function todayBatchTip(b) {
     return '<tr><td class="tt-d">' + label + '</td><td class="tt-v">' + v + '</td></tr>';
   }
   var readHtml = (!brix && !ph && !temp)
-    ? '<div class="tt-empty">No readings logged yet</div>'
-    : '<div class="tt-subhead">Latest readings</div><table class="tt-tbl">'
+    ? '<div class="tt-empty">' + (cap ? 'No readings logged before bottling' : 'No readings logged yet') + '</div>'
+    : '<div class="tt-subhead">' + (cap ? 'Readings at bottling' : 'Latest readings') + '</div><table class="tt-tbl">'
         + row('Brix', brix, '%') + row('pH', ph, '') + row('Temp', temp, '\u00b0C') + '</table>';
   return head + readHtml;
 }
@@ -2432,7 +2442,7 @@ function todayTimeline(rows, o) {
     var over = day > DAYS;
     var warn = (o.warnFromDay != null && day >= o.warnFromDay);
     var tipAttr = '';
-    if (row.tipBatch) { var tipHtml = todayBatchTip(row.tipBatch); if (tipHtml) tipAttr = ' data-tiphtml="' + esc(tipHtml) + '"'; }
+    if (row.tipBatch) { var tipHtml = todayBatchTip(row.tipBatch, row.tipCutoff); if (tipHtml) tipAttr = ' data-tiphtml="' + esc(tipHtml) + '"'; }
     h += '<div class="ftl-row' + (warn ? ' ftl-warn' : '') + '"' + tipAttr + '>';
     h += '<div class="ftl-label"><div class="ftl-batch-id">' + esc(row.id) + '</div></div>';
     h += '<div class="ftl-track-outer"><div class="ftl-track-rail"><div class="ftl-track-fill' + (over ? ' over' : '') + '" style="width:' + pct.toFixed(1) + '%"></div></div>';
@@ -2464,13 +2474,13 @@ function todayF1Section() {
 function todayF2Section() {
   var active = todayActiveF2();
   var h = '<div class="an-section"><div class="sec-title">Second fermentation in progress</div>';
-  h += '<div class="sec-note">Day of carbonation across ' + F2_DAYS + ' days. Bottles on day ' + F2_WARN_DAY + '+ are flagged in red. Hover a bar to see its source batch\u2019s readings.</div>';
+  h += '<div class="sec-note">Day of carbonation across ' + F2_DAYS + ' days. Bottles on day ' + F2_WARN_DAY + '+ are flagged in red. Hover a bar to see its source batch\u2019s readings at bottling.</div>';
   if (!active.length) return h + '<div class="an-empty">No bottles carbonating right now. Bottle a batch (bottling date set, no fridge date yet) and it shows up here.</div></div>';
   var rows = [];
   for (var i = 0; i < active.length; i++) {
     var bo = active[i], relB = null;
     for (var k = 0; k < batches.length; k++) { if (String(batches[k].uid) === String(bo.relF1Uid)) { relB = batches[k]; break; } }
-    rows.push({ id: bo.bottleId || bo.relF1Id || 'bottle', start: bo.bottlingDate, tipBatch: relB });
+    rows.push({ id: bo.bottleId || bo.relF1Id || 'bottle', start: bo.bottlingDate, tipBatch: relB, tipCutoff: bo.bottlingDate });
   }
   return h + todayTimeline(rows, { days: F2_DAYS, warnFromDay: F2_WARN_DAY }) + '</div>';
 }
